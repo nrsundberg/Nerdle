@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 
 def initalize():
-    global words, list_of_lists, list_of_occur, list_of_duplicate_sorted, list_of_rank, list_of_rank_unique, possible_words, url, letter_in, letter_right, letter_one_score
+    global words, list_of_lists, list_of_occur, list_of_duplicate_sorted, list_of_rank, list_of_rank_unique, possible_words, url
+    global letter_in, letter_right, letter_one_score, possible_words_refined_scored, possible_words_refined_scored_ranked, word_score
     url = "https://raw.githubusercontent.com/tabatkins/wordle-list/main/words"
     words = pd.read_csv(url)
     list_of_lists = ["letter_one", "letter_two", "letter_three", "letter_four", "letter_five"]
@@ -16,6 +17,9 @@ def initalize():
     letter_in = ""
     letter_right = ""
     letter_one_score = []
+    possible_words_refined_scored = []
+    possible_words_refined_scored_ranked = []
+    word_score = []
 
 def create_letter_list():
     global letter_one, letter_two, letter_three, letter_four, letter_five
@@ -105,7 +109,6 @@ def get_letters_and_ranks():
     letter_list()
     occurances()
     ranking_function()
-    print(f"{letter_one_rank_unique} \n {letter_two_rank_unique} \n {letter_three_rank_unique} \n {letter_four_rank_unique} \n {letter_five_rank_unique}")
 
 def correct_letter(): 
     global letters_in_position, letter_right
@@ -113,8 +116,9 @@ def correct_letter():
     if letter_right not in letters_in_position.keys():       
         letters_in_position[f"{letter_right}"] = [int(guess.index(letter_right))]
     else:
-        letters_in_position[f"{letter_right}"].append(int(guess.index(letter_right)))
-
+        index_pos = len(guess) - guess[::-1].index(letter_right) - 1
+        letters_in_position[f"{letter_right}"].append(int(index_pos))
+    
 def in_word_letter():
     global letters_not_in_position, letter_in
     letter_in = input("Which letter? ")
@@ -143,14 +147,14 @@ def letters_known_word_refine():
     for word in possible_words_refined.copy(): 
         for letter in combined_possibilities:
             if letter not in word:
-                possible_words_refined.remove(word)   
+                possible_words_refined.discard(word)   
 
 def letters_remove_word_refine():
     global possible_words_refined
     for word in possible_words_refined.copy():
         for letter in non_letters:
             if letter in word:
-                possible_words_refined.remove(word)
+                possible_words_refined.discard(word)
                 break
 
 def make_a_guess():
@@ -177,8 +181,8 @@ def make_a_guess():
         positional()
         letters_known_word_refine()
         letters_remove_word_refine()
-        print(possible_words_refined)
         get_letters_and_ranks()
+        ranking_initial()
         ending_criteria = input("Game over? y/n ")
 
 def new_game():
@@ -192,22 +196,47 @@ def new_game():
     letters_not_in_position = {}
     non_letters = []
     guess = []
+    possible_words_refined = possible_words.copy()
+    get_letters_and_ranks()
+    ranking_initial()
     make_a_guess()
-# need to do double letter
 
-def ranking_intial():
-    global letter_one_score
-    letter_one_score = range(26, 0, -1)
-    letter_index = 0
+def get_rank_word(word):
+    rank = int(word[:-6])
+    return rank
+
+def ranking_initial():
+    global possible_words_refined_scored, possible_words_refined_scored_ranked, word_score
+    possible_words_refined_scored = []
+    possible_words_refined_scored_ranked = []
     for word in possible_words_refined:
         word_score = []
+        letter_index = 0
         for letter in word:
             if letter_index < 4:
-                letter_score = letter_one_score[word.index(letter)]
+                # Get frequency of letter in the position of word
+                position = (globals()[list_of_lists[letter_index]]).index(letter)
+                letter_score = int(globals()[list_of_duplicate_sorted[letter_index]][position][:-2])
                 word_score.append(letter_score)
+                letter_index = letter_index + 1
             else:
-                letter_score = letter_one_score[word.index(letter)]
+                position = (globals()[list_of_lists[letter_index]]).index(letter)
+                letter_score = int(globals()[list_of_duplicate_sorted[letter_index]][position][:-2])
                 word_score.append(letter_score)
-                sum(word_score)   
+                letter_index = letter_index + 1
+                total_score = sum(word_score)   
+                possible_words_refined_scored.append(f"{total_score}.{word}")
+    possible_words_refined_scored = sorted(possible_words_refined_scored, key= get_rank_word)
+    for word in possible_words_refined_scored:
+        possible_words_refined_scored_ranked.append(word[len(word)-5:])
+    total_words = len(possible_words_refined_scored_ranked)
+    print(f"Total words left: {total_words}")
+    if total_words < 5:
+        print(possible_words_refined_scored_ranked)
+    else:
+        print(f"{possible_words_refined_scored_ranked[0]}\n{possible_words_refined_scored_ranked[1]}\n{possible_words_refined_scored_ranked[2]}")
+        print(f"{possible_words_refined_scored_ranked[3]}\n{possible_words_refined_scored_ranked[4]}")
+
 # score each and add it to the word then use rank function to sort words
+# function for word that doesn't include perfect letters and looks only at frequency    
     print("done")
