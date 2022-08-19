@@ -185,22 +185,6 @@ def make_a_guess():
         ranking_initial()
         ending_criteria = input("Game over? y/n ")
 
-def new_game():
-    global list1, list2, combined_possibilities, guess, non_letters, letters_not_in_position, letters_in_position, possible_words_refined, possible_words
-    initalize()
-    list1 = []
-    list2 =[]
-    possible_words_refined = set()
-    combined_possibilities = []
-    letters_in_position = {}
-    letters_not_in_position = {}
-    non_letters = []
-    guess = []
-    possible_words_refined = possible_words.copy()
-    get_letters_and_ranks()
-    ranking_initial()
-    make_a_guess()
-
 def get_rank_word(word):
     rank = int(word[:-6])
     return rank
@@ -240,3 +224,19 @@ def ranking_initial():
 # score each and add it to the word then use rank function to sort words
 # function for word that doesn't include perfect letters and looks only at frequency    
     print("done")
+
+def new_game():
+    global list1, list2, combined_possibilities, guess, non_letters, letters_not_in_position, letters_in_position, possible_words_refined, possible_words
+    initalize()
+    list1 = []
+    list2 =[]
+    possible_words_refined = set()
+    combined_possibilities = []
+    letters_in_position = {}
+    letters_not_in_position = {}
+    non_letters = []
+    guess = []
+    possible_words_refined = possible_words.copy()
+    get_letters_and_ranks()
+    ranking_initial()
+    make_a_guess()
