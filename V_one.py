@@ -1,9 +1,3 @@
-from itertools import count
-from operator import add, index
-import re
-import numpy as np
-import pandas as pd
-import colorama 
 from colorama import Fore
 import csv
 
@@ -109,7 +103,7 @@ def create_ranking_sets_lists():
     letter_five_rank_unique = []
 
 def get_rank(letter):
-    rank = int(letter[:-2])
+    rank = float(letter[:-2])
     return rank
 
 def ranking_function():
@@ -231,7 +225,6 @@ def play_game():
     non_letters = []
     guess = []
     possible_words_refined = possible_words.copy()
-    make_a_guess()
 
 def make_a_guess():
     global guess, non_letters, letters_in_position, letters_not_in_position, possible_words_refined, list1, list2, combined_possibilities
@@ -298,9 +291,13 @@ def make_a_guess():
 def new_game():
     try:
         possible_words
-        return print_all_word_rank(), play_game()
+        print_all_word_rank()
+        play_game()
+        make_a_guess()
     except NameError:
-        return on_open(), play_game()
+        on_open()
+        play_game()
+        make_a_guess()
 
 def ranking_every_word():
     global word_score, all_words_scored_ranked, all_words_scored, total_words
@@ -334,3 +331,10 @@ def print_all_word_rank():
     print(f"Total words left: {total_words}")
     print(f"{all_words_scored_ranked[0]}\n{all_words_scored_ranked[1]}\n{all_words_scored_ranked[2]}")
     print(f"{all_words_scored_ranked[3]}\n{all_words_scored_ranked[4]}")
+
+def open_functionality():
+    try:
+        possible_words
+    except NameError:
+        on_open()
+        play_game()
