@@ -1,5 +1,4 @@
 import csv
-from unicodedata import name
 possible_words = {'word' : []}
 
 words = []
@@ -38,13 +37,3 @@ def ranking_every_word():
     for word in all_words_scored:
         all_words_scored_ranked.append(word[len(word)-5:])
     total_words = len(all_words_scored_ranked)
-
-class testing:
-
-    def __init__(self, name):
-        self.name = "bill"
-
-    def function_one(name):
-        print(name*2)
-
-testing.function_one(testing.__init__())
