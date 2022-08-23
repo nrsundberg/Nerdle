@@ -4,6 +4,15 @@ import csv
 
 V_one.open_functionality()
 
+# var to init on open
+possible_words_dict = {}
+possible_words_dict['words'] = V_one.possible_words
+letters_in_position = {}
+letters_in_word = {}
+color_list = [V_one.Fore.WHITE, V_one.Fore.WHITE, V_one.Fore.WHITE, V_one.Fore.WHITE, V_one.Fore.WHITE]
+import_answers = []    
+possible_answers = []
+
 with open('answers.csv', 'r') as read_obj:
         read = csv.reader(read_obj)
         import_answers = list(read)
@@ -19,15 +28,6 @@ def new_answer():
         for letter in word:
             answer_letters.append(letter)
 
-# var to init on open
-possible_words_dict = {}
-possible_words_dict['words'] = V_one.possible_words
-letters_in_position = {}
-letters_in_word = {}
-color_list = [V_one.Fore.WHITE, V_one.Fore.WHITE, V_one.Fore.WHITE, V_one.Fore.WHITE, V_one.Fore.WHITE]
-import_answers = []    
-possible_answers = []
-
 def correct_letter():
     global letters_in_position, letter_right
     letter_right = input("Which letter? ")
@@ -37,10 +37,15 @@ def correct_letter():
         index_pos = len(guess) - guess[::-1].index(letter_right) - 1
         letters_in_position[f"{letter_right}"].append(int(index_pos))
 
+def new_game():
+    new_answer()
+    guess_number = 1
+    while guess != answer and guess_number <= 6:
+        play_in_term_game()
+        guess_number = guess_number + 1
 
 def play_in_term_game():
     global guess, possible_words_dict, answer
-    new_answer()
     guess = []
     guess = input("Please guess a word ")
     while guess not in possible_words_dict['words']:
