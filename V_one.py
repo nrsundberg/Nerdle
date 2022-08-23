@@ -6,7 +6,7 @@ def on_open():
     possible_words = []
     words = []
     possible_words = []
-    with open('words_dictonary.csv', 'r') as read_obj:
+    with open("C:/Users/Noah/Documents/Nerdle/words_dictonary.csv") as read_obj:
         read = csv.reader(read_obj)
         words = list(read)
     for lists in words:
