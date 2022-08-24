@@ -1,6 +1,6 @@
 # Packages needed
 from colorama import Fore
-import csv
+import requests
 from random import sample
 
 def initialize():
@@ -58,22 +58,18 @@ def initialize():
     dict_letters_score = ["letter_one_score_ranked", "letter_two_score_ranked", "letter_three_score_ranked", "letter_four_score_ranked", "letter_five_score_ranked"]
     # Color list for print out of guess letters
     color_list = [Fore.WHITE, Fore.WHITE, Fore.WHITE, Fore.WHITE, Fore.WHITE]
-    # Read in possible word list
-    with open("C:/Users/Noah/Documents/Nerdle/words_dictonary.csv", 'r') as read_obj:
-        read = csv.reader(read_obj)
-        words = list(read)
-    for lists in words:
-        for word in lists:
-            all_words["words"].append(word)
+    # Read in possible word list and answer list
+    word_url = "https://raw.githubusercontent.com/nrsundberg/Nerdle/master/words_dictonary.csv"
+    answer_url = "https://raw.githubusercontent.com/nrsundberg/Nerdle/master/answers.csv"
+    download_word = requests.get(word_url).text
+    words = download_word.split(',')
+    words[12973] = words[12973][:-1]
+    all_words["words"] = words
     index_FALSE = all_words["words"].index("FALSE")
     all_words["words"][index_FALSE] = "false"
-    # Read in possible answer list
-    with open("C:/Users/Noah/Documents/Nerdle/answers.csv", 'r') as read_obj:
-            read = csv.reader(read_obj)
-            import_answers = list(read)
-    for lists in import_answers:
-        for word in lists:
-            possible_answers.append(word)
+    download_answer = requests.get(answer_url).text
+    possible_answers = download_answer.split(',')
+    possible_answers[2308] = possible_answers[2308][:-1]
 
 # Ranking function used to get the score of a letter
 def get_letter_rank(letter):
