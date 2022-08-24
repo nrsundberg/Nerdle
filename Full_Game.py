@@ -153,7 +153,7 @@ def game_without_letters_filter():
         if letter == answer[letter_index]:
             color_list[letter_index] = Fore.GREEN
             letter_index += 1
-        elif letter in answer:
+        elif letter in answer and guess[letter_index:].count(letter) <= answer.count(letter):
             color_list[letter_index] = Fore.YELLOW
             letter_index += 1
         else:
