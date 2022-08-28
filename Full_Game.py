@@ -153,9 +153,19 @@ def game_without_letters_filter():
         if letter == answer[letter_index]:
             color_list[letter_index] = Fore.GREEN
             letter_index += 1
-        elif letter in answer and guess[:letter_index + 1].count(letter) <= answer.count(letter):
-            color_list[letter_index] = Fore.YELLOW
-            letter_index += 1
+        elif letter in answer:
+            if guess.count(letter) <= answer.count(letter):
+                color_list[letter_index] = Fore.YELLOW
+                letter_index += 1
+            elif guess[answer.index(letter)] == letter:
+                color_list[letter_index] = Fore.BLACK
+                letter_index += 1
+            elif guess[:letter_index + 1].count(letter) <= answer.count(letter):
+                color_list[letter_index] = Fore.BLACK
+                letter_index += 1
+            else:
+                color_list[letter_index] = Fore.YELLOW
+                letter_index += 1
         else:
             color_list[letter_index] = Fore.BLACK
             letter_index += 1
