@@ -338,3 +338,5 @@ def open_functionality():
     except NameError:
         on_open()
         play_game()
+
+new_game()

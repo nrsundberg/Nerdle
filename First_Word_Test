@@ -331,11 +331,31 @@ def best_first_word():
                 avg_second_possible_words[(''.join(guess))] = mean(total_words_second)
     print(avg_second_possible_words)
 
+def single_word_check():
+    global guess, avg_second_possible_words , total_words_second, non_letters, letters_in_position
+    global letters_not_in_position, combined_possibilities, possible_words_list, total_words_second, answer
+    avg_second_possible_words = {}
+    reset()
+    word = "soare"
+    guess = [*word]
+    total_words_second = []
+    for answer in possible_answers:
+        answer = [*answer]
+        reset()
+        refine_guess()
+        possible_words_refine()
+        total_words = len(possible_words_list)
+        total_words_second.append(total_words)
+        if ''.join(answer) == possible_answers[2308]:
+            avg_second_possible_words[(''.join(guess))] = mean(total_words_second)
+    print(avg_second_possible_words)
+
+
 initialize()
+single_word_check()
 
-best_first_word()
 
-import timeit
+# import timeit
 
 def best_first_word_benchmark():
     global guess, avg_second_possible_words, answer
@@ -354,7 +374,7 @@ def best_first_word_benchmark():
                 avg_second_possible_words[word] = mean(total_words_second)
     print(avg_second_possible_words)
 
-num_runs = 4
-duration = timeit.Timer(best_first_word_benchmark).timeit(number=num_runs)
-avg_duration_in_hours = duration/num_runs*len(all_words["words"])/60/60
-print(avg_duration_in_hours)
+# num_runs = 4
+# duration = timeit.Timer(best_first_word_benchmark).timeit(number=num_runs)
+# avg_duration_in_hours = duration/num_runs*len(all_words["words"])/60/60
+# print(avg_duration_in_hours)
